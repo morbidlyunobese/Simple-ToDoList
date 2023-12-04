@@ -2,73 +2,119 @@
 #include <string>
 #include <vector>
 
-class ToDoList { // this class will handle all of our variables
+class List {
 	public:
-		std::vector<std::string> taskList;
+		std::vector<std::string> list;
 
-		void addToList() {
+	public:
+		void displayActions() {
+			std::cout << "{A}dd to list.\n";
+				std::cout << "{G}et Tasks.\n";
+			std::cout << "{R}emove from list.\n";
+				std::cout << "{D}isplay choices.\n";
+			std::cout << "{E}xit.\n";
+		}
 
-			std::string task;
-
-			std::cout << "Enter task: ";
-			std::getline(std::cin, task);
-
-			taskList.push_back(task);
-
-			std::cout << "Task: " << task << " successfully added at index size: " << taskList.size() - 1 << std::endl;
-
+		void setList() {
+			std::cout << "How many tasks (0-6): ";
+				int size;
+			std::cin >> size;
+			
+			if (size > 0 && size <= 6) {
+				for (int i = 0; i < size; i++) {
+					std::string task;
+						std::cout << "Enter task " << i + 1 << ": ";
+					std::cin >> task;
+						list.push_back(task);
+					std::cout << "\n";
+				}
+			}
+			else {
+				std::cout << "Must be between 0-6.\n";
+			}
 		}
 
 		void getList() {
-
-			for (size_t i = 0; i < taskList.size(); ++i) {
-				std::cout << "Task "<< i << ": " << taskList[i] << "\n";
-
+			if (list.empty()) {
+				std::cout << "List is empty. Try adding some tasks!";
 			}
+			else {
+				for (int i = 0; i < list.size(); ++i) {
+					std::cout << "Task " << i + 1 << ": " << list[i] << "\n";
+				}
+			}
+			
+
 		}
 
 		void removeTask() {
+			char option;
+			int index;
+
+			std::cout << "Would you like to display your current tasks? (Y/N): ";
+			std::cin >> option;
 			
-			int position;
+			if (option == 'Y' || option == 'y') {
+				getList();
+			}
+			else if (option == 'N' || option == 'n') {
+				std::cout << "\n";
+			}
 
-			std::cout << "Which task do you want to remove?: ";
-			std::cin >> position;
+			std::cout << "Enter task to remove: ";
+			std::cin >> index;
 
-			if (position >= 0 && position < taskList.size()) {
-				taskList.erase(taskList.begin() + position);
-				std::cout << "Task at index: " << position << " removed!";
-
+			if (index >= 0 && index < list.size()) {
+				list.erase(list.begin() + index);
+				std::cout << "Task at index: " << index << " removed!";
 			}
 			else {
-				std::cout << "Index " << position << " not found or out of range.";
+				std::cout << "Task index not found.";
 			}
+
 		}
 };
 
+
 int main() {
+	bool userLoop = true;
+	char userChoice;
+	List list;
 
-	ToDoList List;
-	int tasks;
+	std::cout << "WELCOME TO MY TO-DO-LIST EDITOR!!! IT'S VERY BASIC." << std::endl;
+	std::cout << "\n";
+	
+	list.displayActions();
+	std::cout << "\n";
 
-	std::cout << "Welcome to my To-Do-List program! This is a temporary program to help manage your tasks at hand. \n";
+	while (userLoop) {
+		std::cout << "Enter option: ";
+		std::cin >> userChoice;
 
-	std::cout << "How many tasks would you like to add?: ";
-	std::cin >> tasks;
-	std::cin.ignore();
+		switch (userChoice) {
+			case 'A':
+				list.setList();
+				std::cout << "\n";
+				break;
 
-	for (int i = 0; i < tasks; ++i) {
-		List.addToList();
+			case 'G':
+				list.getList();
+				std::cout << "\n";
+				break;
+
+			case 'R':
+				list.removeTask();
+				std::cout << "\n";
+				break;
+
+			case 'D':
+				list.displayActions();
+				std::cout << "\n";
+				break;
+
+			case 'E':
+				userLoop = false;
+				break;
+		}
 	}
-
-	std::cout << "\n";
-
-	List.getList();
-
-	std::cout << "\n";
-
-	List.removeTask();
-
-	std::cout << "\n";
-
-	List.getList();
 }
